@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NestFinder — America's Trusted Agent Directory</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   ROOT & RESET
+═══════════════════════════════════════════ */
+:root {
+  --ink:     #1a1208;
+  --bark:    #2c1f0e;
+  --terra:   #c85c2a;
+  --amber:   #e8a030;
+  --sage:    #4a7c59;
+  --sand:    #f5f0e8;
+  --parch:   #faf7f2;
+  --smoke:   #8c8070;
+  --line:    #e0d8cc;
+  --white:   #ffffff;
+  --radius:  6px;
+  --serif:   'Fraunces', Georgia, serif;
+  --sans:    'Outfit', sans-serif;
+  --mono:    'DM Mono', monospace;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;font-size:16px;}
+body{font-family:var(--sans);color:var(--ink);background:var(--parch);overflow-x:hidden;font-weight:400;line-height:1.6;}
+img{max-width:100%;display:block;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:var(--sans);}
+input,select,textarea{font-family:var(--sans);}
+
+/* ═══════════════════════════════════════════
+   REVEAL ANIMATIONS
+═══════════════════════════════════════════ */
+.fade-up{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
+.fade-up.in{opacity:1;transform:none;}
+.fade-up.d1{transition-delay:.1s;} .fade-up.d2{transition-delay:.2s;}
+.fade-up.d3{transition-delay:.3s;} .fade-up.d4{transition-delay:.4s;}
+
+/* ═══════════════════════════════════════════
+   TOPNAV
+═══════════════════════════════════════════ */
+.topnav{
+  position:sticky;top:0;z-index:1000;
+  background:var(--bark);
+  padding:0;
+  border-bottom:2px solid var(--terra);
+}
+.topnav-inner{
+  max-width:1320px;margin:0 auto;padding:0 24px;
+  display:flex;align-items:center;gap:0;height:58px;
+}
+.brand{
+  display:flex;align-items:center;gap:10px;
+  margin-right:40px;flex-shrink:0;
+}
+.brand-icon{
+  width:32px;height:32px;background:var(--terra);
+  display:flex;align-items:center;justify-content:center;
+  border-radius:4px;
+}
+.brand-icon svg{color:#fff;}
+.brand-name{
+  font-family:var(--serif);font-size:1.25rem;font-weight:600;
+  color:#fff;letter-spacing:-.02em;
+}
+.brand-name span{color:var(--amber);}
+.nav-tabs{display:flex;height:100%;gap:0;}
+.nav-tab{
+  padding:0 18px;height:100%;display:flex;align-items:center;
+  color:rgba(255,255,255,.6);font-size:.82rem;font-weight:500;
+  letter-spacing:.04em;text-transform:uppercase;
+  border-bottom:2px solid transparent;margin-bottom:-2px;
+  cursor:pointer;transition:color .2s,border-color .2s;white-space:nowrap;
+}
+.nav-tab:hover{color:#fff;}
+.nav-tab.active{color:var(--amber);border-bottom-color:var(--amber);}
+.nav-actions{margin-left:auto;display:flex;gap:10px;align-items:center;}
+.nav-btn{
+  padding:8px 18px;font-size:.78rem;font-weight:500;
+  letter-spacing:.04em;text-transform:uppercase;
+  border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);
+  background:transparent;border-radius:var(--radius);
+  transition:all .2s;
+}
+.nav-btn:hover{background:rgba(255,255,255,.1);color:#fff;}
+.nav-btn.primary{background:var(--terra);border-color:var(--terra);color:#fff;}
+.nav-btn.primary:hover{background:#b5512a;}
+
+/* ═══════════════════════════════════════════
+   PAGE SYSTEM
+═══════════════════════════════════════════ */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ═══════════════════════════════════════════
+   SHARED LAYOUT
+═══════════════════════════════════════════ */
+.wrap{max-width:1320px;margin:0 auto;padding:0 24px;}
+.section{padding:80px 0;}
+.section-sm{padding:56px 0;}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:.68rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--terra);margin-bottom:12px;
+}
+.chip::before{content:'';width:20px;height:2px;background:var(--terra);display:block;}
+.section-title{font-family:var(--serif);font-size:clamp(1.8rem,3vw,2.6rem);font-weight:400;color:var(--bark);margin-bottom:14px;line-height:1.15;}
+.section-title em{color:var(--terra);font-style:italic;}
+.section-sub{color:var(--smoke);font-size:.95rem;line-height:1.8;max-width:520px;}
+.divider-line{width:40px;height:2px;background:var(--amber);margin:14px 0 20px;}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:12px 28px;font-size:.82rem;font-weight:500;
+  letter-spacing:.05em;text-transform:uppercase;
+  border-radius:var(--radius);border:none;transition:all .2s;cursor:pointer;
+}
+.btn-terra{background:var(--terra);color:#fff;}
+.btn-terra:hover{background:#b5512a;transform:translateY(-1px);}
+.btn-sage{background:var(--sage);color:#fff;}
+.btn-sage:hover{background:#3d6649;}
+.btn-outline{background:transparent;color:var(--terra);border:1.5px solid var(--terra);}
+.btn-outline:hover{background:var(--terra);color:#fff;}
+.btn-dark{background:var(--bark);color:#fff;}
+.btn-dark:hover{background:var(--ink);}
+
+/* ═══════════════════════════════════════════
+   HOME PAGE
+═══════════════════════════════════════════ */
+
+/* Hero */
+.hero{
+  position:relative;min-height:88vh;display:flex;align-items:center;
+  overflow:hidden;
+  background: linear-gradient(160deg, var(--bark) 0%, #3d2810 40%, #1a1208 100%);
+}
+.hero-pattern{
+  position:absolute;inset:0;
+  background-image:
+    radial-gradient(ellipse 800px 600px at 70% 50%, rgba(200,92,42,.15) 0%, transparent 70%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero-img{
+  position:absolute;right:0;top:0;bottom:0;width:55%;
+  background:url('https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=1200') center/cover no-repeat;
+  opacity:.28;
+  mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.5) 30%,black 100%);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.5) 30%,black 100%);
+}
+.hero-inner{
+  position:relative;z-index:2;
+  max-width:1320px;margin:0 auto;padding:80px 24px;
+  display:grid;grid-template-columns:1fr 440px;gap:60px;align-items:center;
+  width:100%;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(232,160,48,.12);border:1px solid rgba(232,160,48,.25);
+  color:var(--amber);font-size:.7rem;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:22px;
+}
+.hero-eyebrow svg{width:10px;height:10px;}
+.hero h1{
+  font-family:var(--serif);font-size:clamp(2.8rem,5.5vw,5rem);
+  font-weight:300;color:#fff;line-height:1.0;margin-bottom:8px;
+}
+.hero h1 strong{font-weight:600;display:block;}
+.hero h1 em{color:var(--amber);font-style:italic;}
+.hero-desc{color:rgba(255,255,255,.55);font-size:1rem;line-height:1.85;margin:20px 0 36px;max-width:480px;}
+.hero-search-bar{
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  border-radius:8px;padding:6px 6px 6px 16px;
+  display:flex;align-items:center;gap:10px;max-width:500px;margin-bottom:24px;
+}
+.hero-search-bar input{
+  flex:1;background:transparent;border:none;outline:none;
+  color:#fff;font-size:.92rem;font-family:var(--sans);
+  placeholder-color:rgba(255,255,255,.3);
+}
+.hero-search-bar input::placeholder{color:rgba(255,255,255,.35);}
+.hero-search-bar button{
+  background:var(--terra);color:#fff;border:none;
+  padding:10px 22px;border-radius:5px;font-size:.8rem;
+  font-weight:500;letter-spacing:.04em;text-transform:uppercase;
+  display:flex;align-items:center;gap:7px;flex-shrink:0;
+  transition:background .2s;
+}
+.hero-search-bar button:hover{background:#b5512a;}
+.hero-tabs{display:flex;gap:0;border:1px solid rgba(255,255,255,.12);border-radius:6px;overflow:hidden;width:fit-content;margin-bottom:30px;}
+.htab{
+  padding:9px 20px;font-size:.78rem;font-weight:500;letter-spacing:.04em;
+  text-transform:uppercase;color:rgba(255,255,255,.5);cursor:pointer;
+  background:transparent;border:none;transition:all .2s;
+}
+.htab.active{background:var(--terra);color:#fff;}
+.hero-stats{display:flex;gap:32px;margin-top:8px;}
+.hstat .num{font-family:var(--serif);font-size:1.8rem;color:var(--amber);font-weight:400;}
+.hstat .lbl{font-size:.7rem;color:rgba(255,255,255,.4);letter-spacing:.06em;text-transform:uppercase;margin-top:2px;}
+
+/* Hero right card */
+.hero-card{
+  background:rgba(255,255,255,.06);backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:32px;
+  position:relative;
+}
+.hero-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--terra),var(--amber));
+  border-radius:12px 12px 0 0;
+}
+.hero-card h3{font-family:var(--serif);font-size:1.4rem;color:#fff;font-weight:400;margin-bottom:6px;}
+.hero-card p{color:rgba(255,255,255,.45);font-size:.82rem;margin-bottom:22px;}
+.hc-field{width:100%;margin-bottom:12px;}
+.hc-field input,.hc-field select{
+  width:100%;padding:11px 14px;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);border-radius:5px;
+  color:#fff;font-size:.85rem;outline:none;
+  transition:border-color .2s;
+}
+.hc-field input::placeholder{color:rgba(255,255,255,.3);}
+.hc-field input:focus,.hc-field select:focus{border-color:var(--amber);}
+.hc-field select option{background:var(--bark);color:#fff;}
+.hc-btn{
+  width:100%;padding:13px;background:var(--terra);color:#fff;
+  border:none;font-size:.8rem;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;border-radius:5px;transition:background .2s;
+  margin-top:4px;
+}
+.hc-btn:hover{background:#b5512a;}
+.hc-trust{display:flex;align-items:center;gap:7px;margin-top:14px;font-size:.7rem;color:rgba(255,255,255,.35);}
+
+/* Browse categories */
+.browse-section{background:var(--sand);}
+.browse-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:40px;
+}
+.browse-card{
+  position:relative;overflow:hidden;aspect-ratio:4/3;cursor:pointer;
+}
+.browse-card img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+.browse-card:hover img{transform:scale(1.04);}
+.browse-card-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(26,18,8,.9) 0%,rgba(26,18,8,.2) 60%,transparent 100%);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:20px;transition:background .3s;
+}
+.browse-card:hover .browse-card-overlay{background:linear-gradient(0deg,rgba(200,92,42,.88) 0%,rgba(200,92,42,.2) 60%,transparent 100%);}
+.bc-badge{
+  display:inline-block;background:var(--amber);color:var(--bark);
+  font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 8px;border-radius:2px;margin-bottom:8px;width:fit-content;
+}
+.bc-title{color:#fff;font-family:var(--serif);font-size:1.1rem;font-weight:400;}
+.bc-count{color:rgba(255,255,255,.55);font-size:.75rem;margin-top:4px;}
+.browse-card.tall{grid-row:span 2;aspect-ratio:auto;}
+.browse-card.tall .bc-title{font-size:1.4rem;}
+
+/* Agent spotlight */
+.agents-strip{background:var(--parch);}
+.agents-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:40px;
+}
+.agent-card{
+  background:#fff;border:1px solid var(--line);border-radius:10px;
+  overflow:hidden;transition:box-shadow .25s,transform .25s;cursor:pointer;
+}
+.agent-card:hover{box-shadow:0 12px 40px rgba(44,31,14,.1);transform:translateY(-3px);}
+.agent-photo{
+  height:180px;overflow:hidden;position:relative;
+  background:var(--sand);
+}
+.agent-photo img{width:100%;height:100%;object-fit:cover;}
+.agent-badge{
+  position:absolute;top:10px;right:10px;
+  background:var(--terra);color:#fff;
+  font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 8px;border-radius:2px;
+}
+.agent-body{padding:16px;}
+.agent-name{font-family:var(--serif);font-size:1.05rem;font-weight:400;color:var(--bark);margin-bottom:2px;}
+.agent-title{font-size:.75rem;color:var(--terra);font-weight:500;letter-spacing:.04em;margin-bottom:8px;}
+.agent-meta{display:flex;gap:14px;margin-bottom:12px;}
+.agent-meta span{font-size:.72rem;color:var(--smoke);display:flex;align-items:center;gap:4px;}
+.agent-meta svg{width:11px;height:11px;color:var(--amber);}
+.agent-stars{color:var(--amber);font-size:.75rem;letter-spacing:2px;}
+.agent-footer{
+  padding:12px 16px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.agent-footer a{font-size:.72rem;color:var(--terra);font-weight:500;text-transform:uppercase;letter-spacing:.04em;}
+
+/* How it works */
+.how-section{background:var(--bark);}
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:56px;position:relative;}
+.how-grid::before{
+  content:'';position:absolute;top:44px;
+  left:calc(16.67% + 10px);right:calc(16.67% + 10px);
+  height:1px;background:rgba(255,255,255,.1);
+}
+.how-step{padding:0 32px;text-align:center;}
+.how-num{
+  width:88px;height:88px;background:rgba(200,92,42,.15);
+  border:1px solid rgba(200,92,42,.3);
+  font-family:var(--serif);font-size:2rem;font-weight:300;color:var(--amber);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 28px;position:relative;z-index:1;border-radius:50%;
+}
+.how-step h3{font-family:var(--serif);font-size:1.3rem;font-weight:400;color:#fff;margin-bottom:10px;}
+.how-step p{font-size:.83rem;color:rgba(255,255,255,.45);line-height:1.8;}
+
+/* News strip */
+.news-section{background:var(--sand);}
+.news-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:3px;margin-top:40px;}
+.news-card{position:relative;overflow:hidden;}
+.news-card img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+.news-card:hover img{transform:scale(1.03);}
+.news-main{height:340px;}
+.news-side{height:167px;}
+.news-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(26,18,8,.92) 0%,rgba(26,18,8,.1) 60%,transparent 100%);
+  padding:20px;display:flex;flex-direction:column;justify-content:flex-end;
+}
+.news-cat{
+  font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:6px;
+}
+.news-headline{font-family:var(--serif);font-size:1.1rem;font-weight:400;color:#fff;line-height:1.3;}
+.news-main .news-headline{font-size:1.5rem;}
+
+/* Loan/promo banner */
+.promo-banner{
+  background:linear-gradient(135deg,var(--sage) 0%,#2d5c3f 100%);
+  padding:60px 0;
+}
+.promo-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.promo-img{height:300px;overflow:hidden;border-radius:8px;}
+.promo-img img{width:100%;height:100%;object-fit:cover;}
+.promo-text h2{font-family:var(--serif);font-size:2rem;color:#fff;font-weight:400;margin-bottom:12px;}
+.promo-text p{color:rgba(255,255,255,.65);line-height:1.8;margin-bottom:28px;font-size:.92rem;}
+
+/* Local info */
+.local-section{background:var(--parch);}
+.local-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.local-search{
+  display:flex;align-items:center;gap:10px;
+  border:1.5px solid var(--line);border-radius:6px;padding:6px 6px 6px 16px;
+  background:#fff;margin-top:24px;
+}
+.local-search input{flex:1;border:none;outline:none;font-size:.88rem;color:var(--ink);}
+.local-search button{
+  background:var(--terra);color:#fff;border:none;
+  width:36px;height:36px;border-radius:4px;display:flex;align-items:center;justify-content:center;
+}
+.local-img{height:320px;overflow:hidden;border-radius:8px;}
+.local-img img{width:100%;height:100%;object-fit:cover;}
+
+/* ═══════════════════════════════════════════
+   BUY PAGE
+═══════════════════════════════════════════ */
+.page-hero{
+  background:linear-gradient(135deg,var(--bark) 0%,#3d2810 100%);
+  padding:80px 0;
+}
+.page-hero h1{
+  font-family:var(--serif);font-size:clamp(2.2rem,4vw,3.4rem);
+  color:#fff;font-weight:300;margin-bottom:12px;
+}
+.page-hero h1 em{color:var(--amber);font-style:italic;}
+.page-hero p{color:rgba(255,255,255,.55);font-size:1rem;max-width:560px;line-height:1.8;}
+.page-hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+
+.listing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px;}
+.listing-card{
+  background:#fff;border:1px solid var(--line);border-radius:10px;
+  overflow:hidden;transition:box-shadow .25s,transform .25s;
+}
+.listing-card:hover{box-shadow:0 16px 48px rgba(44,31,14,.1);transform:translateY(-3px);}
+.listing-img{height:200px;overflow:hidden;position:relative;}
+.listing-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+.listing-card:hover .listing-img img{transform:scale(1.04);}
+.listing-tag{
+  position:absolute;top:12px;left:12px;
+  background:var(--terra);color:#fff;
+  font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  padding:3px 9px;border-radius:2px;
+}
+.listing-price{
+  position:absolute;bottom:12px;left:12px;
+  background:rgba(26,18,8,.8);color:#fff;
+  font-family:var(--serif);font-size:1.2rem;font-weight:400;
+  padding:4px 12px;border-radius:3px;
+}
+.listing-body{padding:16px;}
+.listing-addr{font-weight:500;font-size:.9rem;color:var(--bark);margin-bottom:4px;}
+.listing-city{font-size:.78rem;color:var(--smoke);margin-bottom:12px;}
+.listing-specs{
+  display:flex;gap:14px;padding-top:12px;border-top:1px solid var(--line);
+}
+.listing-specs span{font-size:.75rem;color:var(--smoke);display:flex;align-items:center;gap:5px;}
+.listing-specs svg{width:12px;height:12px;color:var(--terra);}
+
+/* Filter bar */
+.filter-bar{
+  background:#fff;border:1px solid var(--line);border-radius:8px;
+  padding:20px 24px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;
+  margin-bottom:32px;box-shadow:0 2px 12px rgba(44,31,14,.04);
+}
+.filter-bar select,.filter-bar input{
+  padding:9px 14px;border:1px solid var(--line);border-radius:5px;
+  font-size:.82rem;color:var(--ink);background:var(--parch);outline:none;
+  transition:border-color .2s;
+}
+.filter-bar select:focus,.filter-bar input:focus{border-color:var(--terra);}
+.filter-bar .filter-btn{
+  background:var(--terra);color:#fff;border:none;padding:9px 22px;
+  border-radius:5px;font-size:.8rem;font-weight:500;letter-spacing:.04em;
+  text-transform:uppercase;margin-left:auto;
+}
+
+/* Affordability tools */
+.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px;}
+.tool-card{
+  background:#fff;border:1px solid var(--line);border-radius:10px;
+  padding:28px;transition:box-shadow .25s;
+}
+.tool-card:hover{box-shadow:0 8px 32px rgba(44,31,14,.08);}
+.tool-icon{
+  width:48px;height:48px;background:var(--sand);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;color:var(--terra);
+}
+.tool-card h4{font-family:var(--serif);font-size:1.1rem;color:var(--bark);margin-bottom:8px;}
+.tool-card p{font-size:.82rem;color:var(--smoke);line-height:1.7;margin-bottom:16px;}
+.tool-link{font-size:.78rem;color:var(--terra);font-weight:500;text-transform:uppercase;letter-spacing:.04em;display:flex;align-items:center;gap:5px;}
+
+/* ═══════════════════════════════════════════
+   SELL PAGE
+═══════════════════════════════════════════ */
+.sell-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:40px;}
+.sell-step{
+  background:#fff;border:1px solid var(--line);border-radius:10px;
+  padding:28px;text-align:center;position:relative;
+}
+.sell-step-num{
+  width:44px;height:44px;background:var(--terra);color:#fff;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:1.1rem;margin:0 auto 18px;
+}
+.sell-step h4{font-family:var(--serif);font-size:1rem;color:var(--bark);margin-bottom:8px;}
+.sell-step p{font-size:.8rem;color:var(--smoke);line-height:1.7;}
+
+.agent-search-section{background:var(--sand);}
+.agent-search-bar{
+  display:flex;gap:14px;flex-wrap:wrap;align-items:center;
+  background:#fff;border:1px solid var(--line);border-radius:8px;
+  padding:16px 20px;margin:24px 0;
+  box-shadow:0 2px 12px rgba(44,31,14,.05);
+}
+.agent-search-bar input,.agent-search-bar select{
+  flex:1;min-width:160px;padding:10px 14px;border:1px solid var(--line);
+  border-radius:5px;font-size:.85rem;outline:none;
+  transition:border-color .2s;
+}
+.agent-search-bar input:focus,.agent-search-bar select:focus{border-color:var(--terra);}
+.agent-search-bar button{
+  background:var(--terra);color:#fff;border:none;padding:10px 24px;
+  border-radius:5px;font-size:.8rem;font-weight:500;letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.agents-list-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px;}
+
+/* Valuation CTA */
+.valuation-banner{
+  background:linear-gradient(135deg,var(--terra) 0%,#a84820 100%);
+  padding:72px 0;
+}
+.valuation-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.val-form{background:rgba(255,255,255,.1);border-radius:10px;padding:28px;}
+.val-form h3{font-family:var(--serif);color:#fff;font-size:1.4rem;font-weight:400;margin-bottom:18px;}
+.val-field{margin-bottom:12px;}
+.val-field input,.val-field select{
+  width:100%;padding:11px 14px;background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);border-radius:5px;
+  color:#fff;font-size:.85rem;outline:none;transition:border-color .2s;
+}
+.val-field input::placeholder{color:rgba(255,255,255,.4);}
+.val-field input:focus,.val-field select:focus{border-color:rgba(255,255,255,.6);}
+.val-field select option{background:var(--bark);}
+.val-btn{
+  width:100%;padding:13px;background:#fff;color:var(--terra);
+  border:none;font-size:.8rem;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;border-radius:5px;margin-top:4px;transition:background .2s;
+}
+.val-btn:hover{background:var(--sand);}
+
+/* ═══════════════════════════════════════════
+   RENT PAGE
+═══════════════════════════════════════════ */
+.rent-hero-img{
+  height:380px;overflow:hidden;border-radius:10px;
+  position:relative;
+}
+.rent-hero-img img{width:100%;height:100%;object-fit:cover;}
+.rent-search-overlay{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(0deg,rgba(26,18,8,.95) 0%,rgba(26,18,8,.3) 100%);
+  padding:28px 24px;
+}
+.rent-search-form{display:flex;gap:10px;flex-wrap:wrap;}
+.rent-search-form input,.rent-search-form select{
+  flex:1;min-width:140px;padding:10px 14px;border:none;
+  border-radius:5px;font-size:.85rem;outline:none;background:rgba(255,255,255,.95);
+}
+.rent-search-form button{
+  background:var(--terra);color:#fff;border:none;padding:10px 22px;
+  border-radius:5px;font-size:.8rem;font-weight:500;text-transform:uppercase;letter-spacing:.04em;
+}
+.rentals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px;}
+
+/* ═══════════════════════════════════════════
+   FIND AGENT PAGE (main directory)
+═══════════════════════════════════════════ */
+.directory-layout{display:grid;grid-template-columns:280px 1fr;gap:32px;margin-top:40px;}
+.dir-sidebar{
+  background:#fff;border:1px solid var(--line);border-radius:10px;
+  padding:24px;height:fit-content;position:sticky;top:90px;
+}
+.dir-sidebar h4{font-family:var(--serif);font-size:1rem;color:var(--bark);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line);}
+.filter-group{margin-bottom:20px;}
+.filter-group label{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--smoke);display:block;margin-bottom:7px;}
+.filter-group select,.filter-group input{
+  width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:5px;
+  font-size:.82rem;color:var(--ink);background:var(--parch);outline:none;
+}
+.filter-apply{
+  width:100%;padding:11px;background:var(--terra);color:#fff;border:none;
+  border-radius:5px;font-size:.78rem;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;margin-top:8px;
+}
+.dir-results{display:flex;flex-direction:column;gap:16px;}
+.dir-agent-card{
+  background:#fff;border:1px solid var(--line);border-radius:10px;
+  padding:24px;display:grid;grid-template-columns:100px 1fr auto;gap:20px;align-items:start;
+  transition:box-shadow .25s;
+}
+.dir-agent-card:hover{box-shadow:0 6px 28px rgba(44,31,14,.08);}
+.dir-agent-photo{width:100px;height:100px;border-radius:8px;overflow:hidden;background:var(--sand);}
+.dir-agent-photo img{width:100%;height:100%;object-fit:cover;}
+.dir-agent-name{font-family:var(--serif);font-size:1.15rem;color:var(--bark);margin-bottom:3px;}
+.dir-agent-company{font-size:.78rem;color:var(--terra);font-weight:500;margin-bottom:8px;}
+.dir-agent-stats{display:flex;gap:18px;margin-bottom:10px;}
+.dir-agent-stats span{font-size:.75rem;color:var(--smoke);display:flex;align-items:center;gap:5px;}
+.dir-agent-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.dir-tag{
+  background:var(--sand);color:var(--smoke);font-size:.65rem;
+  font-weight:500;letter-spacing:.04em;text-transform:uppercase;
+  padding:3px 8px;border-radius:2px;
+}
+.dir-agent-actions{display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
+.dir-btn{
+  padding:9px 20px;font-size:.75rem;font-weight:500;
+  letter-spacing:.05em;text-transform:uppercase;border-radius:5px;
+  text-align:center;white-space:nowrap;cursor:pointer;border:none;
+  transition:all .2s;
+}
+.dir-btn-primary{background:var(--terra);color:#fff;}
+.dir-btn-primary:hover{background:#b5512a;}
+.dir-btn-outline{background:transparent;color:var(--terra);border:1.5px solid var(--terra);}
+.dir-btn-outline:hover{background:var(--terra);color:#fff;}
+
+/* ═══════════════════════════════════════════
+   MORTGAGE PAGE
+═══════════════════════════════════════════ */
+.mortgage-calc{
+  background:#fff;border:1px solid var(--line);border-radius:12px;
+  padding:36px;box-shadow:0 4px 20px rgba(44,31,14,.06);
+}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+.calc-field{margin-bottom:18px;}
+.calc-field label{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--smoke);display:block;margin-bottom:7px;}
+.calc-field input,.calc-field select{
+  width:100%;padding:11px 14px;border:1px solid var(--line);border-radius:5px;
+  font-size:.88rem;color:var(--ink);background:var(--parch);outline:none;
+  transition:border-color .2s;
+}
+.calc-field input:focus,.calc-field select:focus{border-color:var(--terra);}
+.calc-result{background:var(--bark);border-radius:8px;padding:28px;text-align:center;}
+.calc-monthly{font-family:var(--serif);font-size:3rem;color:var(--amber);font-weight:300;}
+.calc-monthly span{font-size:1rem;color:rgba(255,255,255,.5);font-family:var(--sans);}
+.calc-breakdown{margin-top:20px;display:flex;flex-direction:column;gap:8px;}
+.calc-row{display:flex;justify-content:space-between;font-size:.8rem;}
+.calc-row span:first-child{color:rgba(255,255,255,.5);}
+.calc-row span:last-child{color:#fff;font-weight:500;}
+.lenders-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px;}
+.lender-card{
+  background:#fff;border:1px solid var(--line);border-radius:10px;padding:24px;
+  transition:box-shadow .25s;
+}
+.lender-card:hover{box-shadow:0 8px 28px rgba(44,31,14,.08);}
+.lender-rate{font-family:var(--serif);font-size:1.8rem;color:var(--terra);font-weight:400;}
+.lender-name{font-size:.85rem;font-weight:500;color:var(--bark);margin:4px 0;}
+.lender-type{font-size:.72rem;color:var(--smoke);}
+
+/* ═══════════════════════════════════════════
+   NEWS PAGE
+═══════════════════════════════════════════ */
+.news-layout{display:grid;grid-template-columns:1fr 320px;gap:40px;margin-top:40px;}
+.news-main-grid{display:flex;flex-direction:column;gap:28px;}
+.news-article{
+  background:#fff;border:1px solid var(--line);border-radius:10px;
+  overflow:hidden;display:grid;grid-template-columns:220px 1fr;
+  transition:box-shadow .25s;
+}
+.news-article:hover{box-shadow:0 8px 28px rgba(44,31,14,.08);}
+.news-article-img{height:160px;overflow:hidden;}
+.news-article-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+.news-article:hover .news-article-img img{transform:scale(1.04);}
+.news-article-body{padding:20px;}
+.news-article-cat{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--terra);margin-bottom:6px;}
+.news-article-title{font-family:var(--serif);font-size:1.05rem;color:var(--bark);line-height:1.3;margin-bottom:8px;}
+.news-article-excerpt{font-size:.8rem;color:var(--smoke);line-height:1.7;}
+.news-article-date{font-size:.68rem;color:rgba(140,128,112,.6);margin-top:8px;font-family:var(--mono);}
+.news-sidebar{display:flex;flex-direction:column;gap:20px;}
+.sidebar-section{background:#fff;border:1px solid var(--line);border-radius:10px;padding:20px;}
+.sidebar-section h4{font-family:var(--serif);font-size:1rem;color:var(--bark);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line);}
+.sidebar-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);}
+.sidebar-item:last-child{border-bottom:none;}
+.sidebar-item img{width:60px;height:50px;object-fit:cover;border-radius:4px;flex-shrink:0;}
+.sidebar-item-title{font-size:.78rem;color:var(--bark);line-height:1.4;font-weight:500;}
+.sidebar-item-date{font-size:.65rem;color:var(--smoke);margin-top:4px;font-family:var(--mono);}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer{background:var(--ink);color:#fff;padding:72px 0 32px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;margin-bottom:56px;}
+.footer-brand img{height:32px;margin-bottom:16px;}
+.footer-brand-name{
+  font-family:var(--serif);font-size:1.4rem;color:#fff;
+  font-weight:400;margin-bottom:14px;
+}
+.footer-brand-name span{color:var(--amber);}
+.footer-about{color:rgba(255,255,255,.35);font-size:.8rem;line-height:1.8;max-width:240px;}
+.footer-col h5{
+  font-family:var(--sans);font-weight:600;font-size:.68rem;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:16px;
+}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.footer-col ul li a{color:rgba(255,255,255,.38);font-size:.78rem;transition:color .2s;}
+.footer-col ul li a:hover{color:#fff;}
+.social-row{display:flex;gap:10px;margin-top:16px;}
+.soc{
+  width:36px;height:36px;background:rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.4);border-radius:4px;transition:all .2s;
+}
+.soc:hover{background:var(--terra);color:#fff;}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,.07);
+  padding-top:24px;display:flex;justify-content:space-between;align-items:center;
+}
+.footer-bottom p{font-size:.7rem;color:rgba(255,255,255,.2);}
+.footer-legal{display:flex;gap:18px;}
+.footer-legal a{font-size:.7rem;color:rgba(255,255,255,.2);transition:color .2s;}
+.footer-legal a:hover{color:rgba(255,255,255,.6);}
+.footer-apps{display:flex;gap:8px;margin-top:14px;}
+.app-badge{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);
+  border-radius:5px;padding:6px 12px;color:rgba(255,255,255,.6);font-size:.7rem;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media(max-width:1100px){
+  .hero-inner{grid-template-columns:1fr;gap:40px;}
+  .hero-card{max-width:420px;}
+  .browse-grid{grid-template-columns:repeat(2,1fr);}
+  .browse-card.tall{grid-row:auto;}
+  .agents-grid{grid-template-columns:repeat(2,1fr);}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:36px;}
+  .directory-layout{grid-template-columns:1fr;}
+  .dir-sidebar{position:static;}
+  .calc-grid{grid-template-columns:1fr;}
+  .news-layout{grid-template-columns:1fr;}
+  .page-hero-inner{grid-template-columns:1fr;}
+}
+@media(max-width:768px){
+  .nav-tabs{gap:0;overflow-x:auto;}
+  .nav-tab{padding:0 12px;font-size:.72rem;}
+  .nav-actions{display:none;}
+  .browse-grid{grid-template-columns:1fr;}
+  .agents-grid{grid-template-columns:1fr;}
+  .how-grid{grid-template-columns:1fr;}
+  .how-grid::before{display:none;}
+  .news-grid{grid-template-columns:1fr;}
+  .listing-grid,.rentals-grid,.lenders-grid,.tools-grid,.sell-steps{grid-template-columns:1fr 1fr;}
+  .promo-inner,.valuation-inner,.local-inner{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+  .agents-list-grid{grid-template-columns:1fr;}
+  .dir-agent-card{grid-template-columns:80px 1fr;gap:14px;}
+  .dir-agent-actions{display:none;}
+  .news-article{grid-template-columns:1fr;}
+  .news-article-img{height:140px;}
+}
+@media(max-width:540px){
+  .listing-grid,.rentals-grid,.lenders-grid,.tools-grid,.sell-steps{grid-template-columns:1fr;}
+  .hero h1{font-size:2.4rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     TOPNAV
+══════════════════════════════════ -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <span class="brand-name">Nest<span>Finder</span></span>
+    </div>
+    <div class="nav-tabs">
+      <div class="nav-tab active" data-page="home">Home</div>
+      <div class="nav-tab" data-page="buy">Buy</div>
+      <div class="nav-tab" data-page="sell">Sell</div>
+      <div class="nav-tab" data-page="rent">Rent</div>
+      <div class="nav-tab" data-page="agents">Find an Agent</div>
+      <div class="nav-tab" data-page="mortgage">Mortgage</div>
+      <div class="nav-tab" data-page="news">News &amp; Insights</div>
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn" onclick="showPage('agents')">Save Listings</button>
+      <button class="nav-btn primary" onclick="showPage('agents')">Sign In</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════
+     HOME PAGE
+══════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-pattern"></div>
+    <div class="hero-img"></div>
+    <div class="hero-inner">
+      <div>
+        <div class="hero-eyebrow fade-up">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          America's Top Realtor Directory
+        </div>
+        <h1 class="fade-up d1">Find Your <em>Perfect</em><strong>Agent Today</strong></h1>
+        <p class="hero-desc fade-up d2">Connect with verified, top-rated real estate agents across every market. Whether buying, selling, or renting — we match you with professionals who deliver results.</p>
+
+        <div class="hero-tabs fade-up d3">
+          <button class="htab active">Buy</button>
+          <button class="htab">Sell</button>
+          <button class="htab">Rent</button>
+          <button class="htab">Pre-Qualify</button>
+        </div>
+        <div class="hero-search-bar fade-up d3">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Enter a city, ZIP code, or neighborhood…">
+          <button>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Search
+          </button>
+        </div>
+        <div class="hero-stats fade-up d4">
+          <div class="hstat"><div class="num">2.4M+</div><div class="lbl">Listings</div></div>
+          <div class="hstat"><div class="num">94K</div><div class="lbl">Verified Agents</div></div>
+          <div class="hstat"><div class="num">50</div><div class="lbl">States Covered</div></div>
+        </div>
+      </div>
+
+      <!-- Booking Card -->
+      <div class="hero-card fade-up d2">
+        <h3>Find a Trusted Agent</h3>
+        <p>Get matched with top professionals in your area today.</p>
+        <div class="hc-field"><input type="text" placeholder="Your city or ZIP code"></div>
+        <div class="hc-field">
+          <select>
+            <option value="">I want to…</option>
+            <option>Buy a Home</option>
+            <option>Sell My Home</option>
+            <option>Rent a Property</option>
+            <option>Invest in Real Estate</option>
+          </select>
+        </div>
+        <div class="hc-field"><input type="text" placeholder="Price range (optional)"></div>
+        <button class="hc-btn">Match Me With an Agent →</button>
+        <div class="hc-trust">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          All agents are verified &amp; background-checked
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Browse Categories -->
+  <section class="section browse-section">
+    <div class="wrap">
+      <div class="fade-up">
+        <span class="chip">Explore by Type</span>
+        <h2 class="section-title">Browse Homes in <em>Your Market</em></h2>
+      </div>
+      <div class="browse-grid fade-up d1">
+        <div class="browse-card tall" onclick="showPage('buy')">
+          <img src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600" alt="New Listings">
+          <div class="browse-card-overlay">
+            <span class="bc-badge">Hot</span>
+            <div class="bc-title">New Listings</div>
+            <div class="bc-count">14,230 homes added this week</div>
+          </div>
+        </div>
+        <div class="browse-card" onclick="showPage('buy')">
+          <img src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Price Reduced">
+          <div class="browse-card-overlay">
+            <span class="bc-badge">Deal</span>
+            <div class="bc-title">Price Reduced</div>
+            <div class="bc-count">8,410 homes</div>
+          </div>
+        </div>
+        <div class="browse-card" onclick="showPage('buy')">
+          <img src="https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Open Houses">
+          <div class="browse-card-overlay">
+            <span class="bc-badge">This Weekend</span>
+            <div class="bc-title">Open Houses</div>
+            <div class="bc-count">3,892 upcoming</div>
+          </div>
+        </div>
+        <div class="browse-card" onclick="showPage('buy')">
+          <img src="https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Recently Sold">
+          <div class="browse-card-overlay">
+            <span class="bc-badge">Sold</span>
+            <div class="bc-title">Recently Sold</div>
+            <div class="bc-count">Track market values</div>
+          </div>
+        </div>
+        <div class="browse-card" onclick="showPage('buy')">
+          <img src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600" alt="New Construction">
+          <div class="browse-card-overlay">
+            <span class="bc-badge">New Build</span>
+            <div class="bc-title">New Construction</div>
+            <div class="bc-count">1,280 communities</div>
+          </div>
+        </div>
+        <div class="browse-card" onclick="showPage('buy')">
+          <img src="https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Land & Lots">
+          <div class="browse-card-overlay">
+            <span class="bc-badge">Land</span>
+            <div class="bc-title">Land &amp; Lots</div>
+            <div class="bc-count">Build your dream home</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Agents -->
+  <section class="section agents-strip">
+    <div class="wrap">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;" class="fade-up">
+        <div>
+          <span class="chip">Top Professionals</span>
+          <h2 class="section-title">Featured <em>Agents</em> Near You</h2>
+        </div>
+        <a class="btn btn-outline" onclick="showPage('agents')" style="cursor:pointer;">View All Agents →</a>
+      </div>
+      <div class="agents-grid">
+        <div class="agent-card fade-up d1" onclick="showPage('agents')">
+          <div class="agent-photo">
+            <img src="https://images.pexels.com/photos/3760809/pexels-photo-3760809.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Agent">
+            <span class="agent-badge">Top Producer</span>
+          </div>
+          <div class="agent-body">
+            <div class="agent-name">Margaret Holloway</div>
+            <div class="agent-title">Senior Listing Specialist</div>
+            <div class="agent-meta">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>4.9 (218 reviews)</span>
+              <span>12 yrs exp.</span>
+            </div>
+            <div class="agent-stars">★★★★★</div>
+          </div>
+          <div class="agent-footer">
+            <span style="font-size:.72rem;color:var(--smoke);">Austin, TX</span>
+            <a>View Profile →</a>
+          </div>
+        </div>
+        <div class="agent-card fade-up d2" onclick="showPage('agents')">
+          <div class="agent-photo">
+            <img src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Agent">
+            <span class="agent-badge">5-Star</span>
+          </div>
+          <div class="agent-body">
+            <div class="agent-name">David Okafor</div>
+            <div class="agent-title">Buyer's Specialist</div>
+            <div class="agent-meta">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>4.8 (175 reviews)</span>
+              <span>9 yrs exp.</span>
+            </div>
+            <div class="agent-stars">★★★★★</div>
+          </div>
+          <div class="agent-footer">
+            <span style="font-size:.72rem;color:var(--smoke);">Chicago, IL</span>
+            <a>View Profile →</a>
+          </div>
+        </div>
+        <div class="agent-card fade-up d3" onclick="showPage('agents')">
+          <div class="agent-photo">
+            <img src="https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Agent">
+            <span class="agent-badge">Luxury</span>
+          </div>
+          <div class="agent-body">
+            <div class="agent-name">Sofia Reinholt</div>
+            <div class="agent-title">Luxury Property Expert</div>
+            <div class="agent-meta">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>5.0 (94 reviews)</span>
+              <span>16 yrs exp.</span>
+            </div>
+            <div class="agent-stars">★★★★★</div>
+          </div>
+          <div class="agent-footer">
+            <span style="font-size:.72rem;color:var(--smoke);">Miami, FL</span>
+            <a>View Profile →</a>
+          </div>
+        </div>
+        <div class="agent-card fade-up d4" onclick="showPage('agents')">
+          <div class="agent-photo">
+            <img src="https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Agent">
+            <span class="agent-badge">Investment</span>
+          </div>
+          <div class="agent-body">
+            <div class="agent-name">Marcus Chen</div>
+            <div class="agent-title">Investment Properties</div>
+            <div class="agent-meta">
+              <span><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>4.7 (302 reviews)</span>
+              <span>7 yrs exp.</span>
+            </div>
+            <div class="agent-stars">★★★★☆</div>
+          </div>
+          <div class="agent-footer">
+            <span style="font-size:.72rem;color:var(--smoke);">Seattle, WA</span>
+            <a>View Profile →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section how-section">
+    <div class="wrap">
+      <div style="text-align:center;" class="fade-up">
+        <span class="chip" style="color:var(--amber);">Simple Process</span>
+        <h2 class="section-title" style="color:#fff;">How <em>NestFinder</em> Works</h2>
+        <div class="divider-line" style="margin:14px auto 0;"></div>
+      </div>
+      <div class="how-grid">
+        <div class="how-step fade-up d1">
+          <div class="how-num">01</div>
+          <h3>Tell Us Your Goals</h3>
+          <p>Share your location, timeline, and whether you're buying, selling, or renting. We learn what matters most to you.</p>
+        </div>
+        <div class="how-step fade-up d2">
+          <div class="how-num">02</div>
+          <h3>Get Matched Instantly</h3>
+          <p>Our smart matching engine connects you with the top 3 agents in your area based on performance, specialty, and fit.</p>
+        </div>
+        <div class="how-step fade-up d3">
+          <div class="how-num">03</div>
+          <h3>Achieve Your Goal</h3>
+          <p>Work with a dedicated professional who knows your market and has a proven record of delivering results for clients.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- News Preview -->
+  <section class="section news-section">
+    <div class="wrap">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;" class="fade-up">
+        <div>
+          <span class="chip">Market Intelligence</span>
+          <h2 class="section-title">News &amp; <em>Insights</em></h2>
+        </div>
+        <a class="btn btn-outline" onclick="showPage('news')" style="cursor:pointer;">All Articles →</a>
+      </div>
+      <div class="news-grid fade-up d1">
+        <div class="news-card news-main" onclick="showPage('news')">
+          <img src="https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg?auto=compress&cs=tinysrgb&w=800" alt="News">
+          <div class="news-overlay">
+            <div class="news-cat">Market Report</div>
+            <div class="news-headline">Home Values Rose 4.2% Nationally in Q2 — Here Are the Top Performing Cities</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          <div class="news-card news-side" onclick="showPage('news')">
+            <img src="https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&cs=tinysrgb&w=600" alt="News">
+            <div class="news-overlay">
+              <div class="news-cat">Buying Guide</div>
+              <div class="news-headline">First-Time Buyers Face New Challenges in 2025</div>
+            </div>
+          </div>
+          <div class="news-card news-side" onclick="showPage('news')">
+            <img src="https://images.pexels.com/photos/7578877/pexels-photo-7578877.jpeg?auto=compress&cs=tinysrgb&w=600" alt="News">
+            <div class="news-overlay">
+              <div class="news-cat">Investment</div>
+              <div class="news-headline">Rental Yields Climb as Demand Outpaces Supply</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          <div class="news-card news-side" onclick="showPage('news')">
+            <img src="https://images.pexels.com/photos/1546168/pexels-photo-1546168.jpeg?auto=compress&cs=tinysrgb&w=600" alt="News">
+            <div class="news-overlay">
+              <div class="news-cat">Mortgage</div>
+              <div class="news-headline">Rate Watch: What to Expect Through Year-End</div>
+            </div>
+          </div>
+          <div class="news-card news-side" onclick="showPage('news')">
+            <img src="https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=600" alt="News">
+            <div class="news-overlay">
+              <div class="news-cat">Design</div>
+              <div class="news-headline">Renovation Trends That Add the Most Value to Your Home</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Loan Banner -->
+  <section class="promo-banner">
+    <div class="wrap">
+      <div class="promo-inner">
+        <div class="promo-img fade-up">
+          <img src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Pre-approval">
+        </div>
+        <div class="fade-up d2">
+          <span class="chip" style="color:rgba(255,255,255,.7);">Financing</span>
+          <h2 class="promo-text h2" style="font-family:var(--serif);font-size:2.2rem;color:#fff;font-weight:400;margin-bottom:14px;">Need a Home Loan? <em style="font-style:italic;">Get Pre-Qualified</em></h2>
+          <p class="promo-text p" style="color:rgba(255,255,255,.65);line-height:1.8;margin-bottom:28px;">Find lenders offering competitive rates and streamlined pre-qualification. Know your buying power before you shop.</p>
+          <button class="btn" style="background:#fff;color:var(--sage);font-weight:600;" onclick="showPage('mortgage')">Explore Mortgage Options →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Local Info -->
+  <section class="section local-section">
+    <div class="wrap">
+      <div class="local-inner">
+        <div class="fade-up">
+          <span class="chip">Neighborhood Data</span>
+          <h2 class="section-title">Discover <em>Local Info</em></h2>
+          <div class="divider-line"></div>
+          <p class="section-sub">Is the neighborhood pet-friendly? How are the schools? What's the commute like? Get all the local data you need to make a confident decision.</p>
+          <div class="local-search">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--smoke)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Address, city, ZIP, or neighborhood…">
+            <button>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="local-img fade-up d2">
+          <img src="https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Local Neighborhood">
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════════════════════════
+     BUY PAGE
+══════════════════════════════════ -->
+<div id="page-buy" class="page">
+  <div class="page-hero">
+    <div class="wrap">
+      <div class="page-hero-inner">
+        <div>
+          <span class="chip" style="color:var(--amber);">Buy a Home</span>
+          <h1>Find Your <em>Dream Home</em></h1>
+          <p>Browse thousands of active listings, schedule tours, and connect with experienced buyer's agents who negotiate on your behalf.</p>
+        </div>
+        <div>
+          <div class="filter-bar" style="background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12);">
+            <input type="text" placeholder="City or ZIP" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff;flex:2;">
+            <select style="background:var(--bark);color:#fff;border-color:rgba(255,255,255,.15);">
+              <option>Any Type</option><option>House</option><option>Condo</option><option>Townhome</option>
+            </select>
+            <select style="background:var(--bark);color:#fff;border-color:rgba(255,255,255,.15);">
+              <option>Any Price</option><option>Under $300k</option><option>$300k–$600k</option><option>$600k–$1M</option><option>$1M+</option>
+            </select>
+            <button class="filter-btn">Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="filter-bar fade-up">
+        <select><option>Any Beds</option><option>1+</option><option>2+</option><option>3+</option><option>4+</option></select>
+        <select><option>Any Baths</option><option>1+</option><option>2+</option><option>3+</option></select>
+        <select><option>Home Type</option><option>Single Family</option><option>Condo</option><option>Townhome</option><option>Multi-Family</option></select>
+        <select><option>Sort: Newest</option><option>Price: Low–High</option><option>Price: High–Low</option><option>Most Popular</option></select>
+        <button class="filter-btn">Apply Filters</button>
+      </div>
+      <p class="fade-up" style="color:var(--smoke);font-size:.82rem;margin-bottom:24px;">Showing <strong style="color:var(--ink);">2,418 homes</strong> in your area</p>
+      <div class="listing-grid">
+        <div class="listing-card fade-up d1">
+          <div class="listing-img">
+            <img src="https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Home">
+            <span class="listing-tag">For Sale</span>
+            <span class="listing-price">$485,000</span>
+          </div>
+          <div class="listing-body">
+            <div class="listing-addr">142 Willow Creek Drive</div>
+            <div class="listing-city">Austin, TX 78701</div>
+            <div class="listing-specs">
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>3 bd</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l2 2-2 2M15 6l-2 2 2 2M5 18h14"/></svg>2 ba</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/></svg>1,840 sqft</span>
+            </div>
+          </div>
+        </div>
+        <div class="listing-card fade-up d2">
+          <div class="listing-img">
+            <img src="https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Home">
+            <span class="listing-tag">Open House</span>
+            <span class="listing-price">$739,000</span>
+          </div>
+          <div class="listing-body">
+            <div class="listing-addr">89 Oakmont Boulevard</div>
+            <div class="listing-city">Denver, CO 80203</div>
+            <div class="listing-specs">
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>4 bd</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l2 2-2 2M15 6l-2 2 2 2M5 18h14"/></svg>3 ba</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/></svg>2,310 sqft</span>
+            </div>
+          </div>
+        </div>
+        <div class="listing-card fade-up d3">
+          <div class="listing-img">
+            <img src="https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Home">
+            <span class="listing-tag">Price Drop</span>
+            <span class="listing-price">$1,249,000</span>
+          </div>
+          <div class="listing-body">
+            <div class="listing-addr">311 Cliffside Terrace</div>
+            <div class="listing-city">Seattle, WA 98101</div>
+            <div class="listing-specs">
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>5 bd</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l2 2-2 2M15 6l-2 2 2 2M5 18h14"/></svg>4 ba</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/></svg>3,650 sqft</span>
+            </div>
+          </div>
+        </div>
+        <div class="listing-card fade-up d1">
+          <div class="listing-img">
+            <img src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Home">
+            <span class="listing-tag">New Build</span>
+            <span class="listing-price">$398,000</span>
+          </div>
+          <div class="listing-body">
+            <div class="listing-addr">7 Sunrise Cove Lane</div>
+            <div class="listing-city">Phoenix, AZ 85001</div>
+            <div class="listing-specs">
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>3 bd</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l2 2-2 2M15 6l-2 2 2 2M5 18h14"/></svg>2 ba</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/></svg>1,620 sqft</span>
+            </div>
+          </div>
+        </div>
+        <div class="listing-card fade-up d2">
+          <div class="listing-img">
+            <img src="https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Home">
+            <span class="listing-tag">For Sale</span>
+            <span class="listing-price">$568,000</span>
+          </div>
+          <div class="listing-body">
+            <div class="listing-addr">224 Maple Ridge Court</div>
+            <div class="listing-city">Nashville, TN 37201</div>
+            <div class="listing-specs">
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>4 bd</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l2 2-2 2M15 6l-2 2 2 2M5 18h14"/></svg>2 ba</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/></svg>2,100 sqft</span>
+            </div>
+          </div>
+        </div>
+        <div class="listing-card fade-up d3">
+          <div class="listing-img">
+            <img src="https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Home">
+            <span class="listing-tag">For Sale</span>
+            <span class="listing-price">$295,000</span>
+          </div>
+          <div class="listing-body">
+            <div class="listing-addr">55 Heritage Park Way</div>
+            <div class="listing-city">Columbus, OH 43215</div>
+            <div class="listing-specs">
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>3 bd</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l2 2-2 2M15 6l-2 2 2 2M5 18h14"/></svg>2 ba</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/></svg>1,480 sqft</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:40px;" class="fade-up">
+        <button class="btn btn-outline">Load More Listings</button>
+      </div>
+
+      <!-- Buyer Tools -->
+      <div style="margin-top:72px;" class="fade-up">
+        <span class="chip">Buyer Tools</span>
+        <h2 class="section-title">Resources to Help You <em>Buy Smart</em></h2>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-card fade-up d1">
+          <div class="tool-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h4>Affordability Calculator</h4>
+          <p>Estimate how much home you can afford based on your income, debts, and down payment. Understand your real budget before you search.</p>
+          <a class="tool-link">Try Calculator →</a>
+        </div>
+        <div class="tool-card fade-up d2">
+          <div class="tool-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <h4>Monthly Cost Estimator</h4>
+          <p>See a full breakdown of what your monthly payment would look like — principal, interest, taxes, and insurance — for any home.</p>
+          <a class="tool-link" onclick="showPage('mortgage')" style="cursor:pointer;">Try Mortgage Tool →</a>
+        </div>
+        <div class="tool-card fade-up d3">
+          <div class="tool-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <h4>Down Payment Help</h4>
+          <p>Discover assistance programs, grants, and low-down-payment loan options that may make homeownership more accessible.</p>
+          <a class="tool-link">Find Assistance →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     SELL PAGE
+══════════════════════════════════ -->
+<div id="page-sell" class="page">
+  <div class="page-hero">
+    <div class="wrap">
+      <span class="chip" style="color:var(--amber);">Sell Your Home</span>
+      <h1>Sell Smarter with a <em>Trusted Agent</em></h1>
+      <p style="color:rgba(255,255,255,.55);max-width:540px;margin-top:10px;line-height:1.8;">Connect with top listing agents, get your home valued, and maximize your sale price. Our experts negotiate hard so you don't leave money on the table.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="fade-up">
+        <span class="chip">Step by Step</span>
+        <h2 class="section-title">How to <em>Sell Your Home</em> Successfully</h2>
+      </div>
+      <div class="sell-steps">
+        <div class="sell-step fade-up d1">
+          <div class="sell-step-num">1</div>
+          <h4>Get Your Home Valued</h4>
+          <p>Start with an accurate market valuation based on recent sales data and local trends.</p>
+        </div>
+        <div class="sell-step fade-up d2">
+          <div class="sell-step-num">2</div>
+          <h4>Choose Your Agent</h4>
+          <p>Interview top listing agents, compare their track records, and pick the best fit for your goals.</p>
+        </div>
+        <div class="sell-step fade-up d3">
+          <div class="sell-step-num">3</div>
+          <h4>Prepare &amp; List</h4>
+          <p>Your agent helps you stage, photograph, and market your home to attract qualified buyers.</p>
+        </div>
+        <div class="sell-step fade-up d4">
+          <div class="sell-step-num">4</div>
+          <h4>Close the Deal</h4>
+          <p>Review offers, negotiate the best terms, and close with confidence.</p>
+        </div>
+      </div>
+
+      <!-- Valuation Banner -->
+      <div class="valuation-banner" style="margin-top:56px;border-radius:12px;overflow:hidden;">
+        <div class="wrap">
+          <div class="valuation-inner">
+            <div class="fade-up">
+              <span class="chip" style="color:rgba(255,255,255,.6);">Free Estimate</span>
+              <h2 style="font-family:var(--serif);color:#fff;font-size:2.2rem;font-weight:400;margin-bottom:14px;">What Is Your Home <em style="font-style:italic;">Worth Today?</em></h2>
+              <p style="color:rgba(255,255,255,.65);line-height:1.8;font-size:.92rem;">The market changes constantly. Get a free, data-driven estimate of your home's current value in seconds — then connect with a local expert to discuss your options.</p>
+              <ul style="list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:10px;">
+                <li style="display:flex;gap:10px;color:rgba(255,255,255,.75);font-size:.85rem;align-items:center;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  Based on real comparable sales data
+                </li>
+                <li style="display:flex;gap:10px;color:rgba(255,255,255,.75);font-size:.85rem;align-items:center;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  Reviewed by a local listing specialist
+                </li>
+                <li style="display:flex;gap:10px;color:rgba(255,255,255,.75);font-size:.85rem;align-items:center;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                  100% free, no obligation
+                </li>
+              </ul>
+            </div>
+            <div class="val-form fade-up d2">
+              <h3>Get Your Free Home Estimate</h3>
+              <div class="val-field"><input type="text" placeholder="Property Address"></div>
+              <div class="val-field"><input type="text" placeholder="City, State, ZIP"></div>
+              <div class="val-field">
+                <select><option value="">Property Type</option><option>Single Family</option><option>Condo</option><option>Townhome</option><option>Multi-Family</option></select>
+              </div>
+              <div class="val-field"><input type="email" placeholder="Your Email Address"></div>
+              <button class="val-btn">Get Free Estimate →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Listing Agent Search -->
+      <div style="margin-top:72px;" class="fade-up">
+        <span class="chip">Find a Listing Agent</span>
+        <h2 class="section-title">Connect with a <em>Selling Expert</em></h2>
+        <p class="section-sub">Browse top-performing listing agents in your area. Compare their sales histories, reviews, and average days on market.</p>
+      </div>
+      <div class="agent-search-bar fade-up d1">
+        <input type="text" placeholder="Your city or ZIP code">
+        <select><option>Any Specialty</option><option>Residential</option><option>Luxury</option><option>Investment</option><option>New Construction</option></select>
+        <button>Find Agents</button>
+      </div>
+      <div class="agents-list-grid">
+        <div class="agent-card fade-up d1">
+          <div class="agent-photo"><img src="https://images.pexels.com/photos/3760809/pexels-photo-3760809.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Agent"><span class="agent-badge">Top Lister</span></div>
+          <div class="agent-body">
+            <div class="agent-name">Margaret Holloway</div>
+            <div class="agent-title">Senior Listing Specialist · Austin, TX</div>
+            <div class="agent-meta"><span>★ 4.9 (218 reviews)</span><span>84 homes sold in 2024</span></div>
+            <div class="agent-stars">★★★★★</div>
+          </div>
+          <div class="agent-footer"><span style="font-size:.72rem;color:var(--smoke);">Avg. 18 days on market</span><a>View →</a></div>
+        </div>
+        <div class="agent-card fade-up d2">
+          <div class="agent-photo"><img src="https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Agent"><span class="agent-badge">Luxury</span></div>
+          <div class="agent-body">
+            <div class="agent-name">Sofia Reinholt</div>
+            <div class="agent-title">Luxury Property Expert · Miami, FL</div>
+            <div class="agent-meta"><span>★ 5.0 (94 reviews)</span><span>31 homes sold in 2024</span></div>
+            <div class="agent-stars">★★★★★</div>
+          </div>
+          <div class="agent-footer"><span style="font-size:.72rem;color:var(--smoke);">Avg. 22 days on market</span><a>View →</a></div>
+        </div>
+        <div class="agent-card fade-up d3">
+          <div class="agent-photo"><img src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Agent"><span class="agent-badge">5-Star</span></div>
+          <div class="agent-body">
+            <div class="agent-name">David Okafor</div>
+            <div class="agent-title">Residential Specialist · Chicago, IL</div>
+            <div class="agent-meta"><span>★ 4.8 (175 reviews)</span><span>67 homes sold in 2024</span></div>
+            <div class="agent-stars">★★★★★</div>
+          </div>
+          <div class="agent-footer"><span style="font-size:.72rem;color:var(--smoke);">Avg. 14 days on market</span><a>View →</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     RENT PAGE
+══════════════════════════════════ -->
+<div id="page-rent" class="page">
+  <div class="page-hero">
+    <div class="wrap">
+      <span class="chip" style="color:var(--amber);">Rent a Property</span>
+      <h1>Find the Perfect <em>Rental Home</em></h1>
+      <p style="color:rgba(255,255,255,.55);max-width:540px;margin-top:10px;line-height:1.8;">Search verified rental listings, filter by your must-haves, and connect directly with landlords and property managers. No hidden fees.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="rent-hero-img fade-up">
+        <img src="https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Rentals">
+        <div class="rent-search-overlay">
+          <p style="color:rgba(255,255,255,.6);font-size:.8rem;margin-bottom:12px;">Search rental listings</p>
+          <div class="rent-search-form">
+            <input type="text" placeholder="City, neighborhood, or ZIP">
+            <select><option>Any Type</option><option>Apartment</option><option>House</option><option>Condo</option><option>Studio</option></select>
+            <select><option>Any Price</option><option>Under $1,000</option><option>$1,000–$2,000</option><option>$2,000–$3,500</option><option>$3,500+</option></select>
+            <select><option>Any Beds</option><option>Studio</option><option>1 Bed</option><option>2 Beds</option><option>3+ Beds</option></select>
+            <button>Search Rentals</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:56px;" class="fade-up">
+        <span class="chip">Available Now</span>
+        <h2 class="section-title">Rental Listings <em>Near You</em></h2>
+      </div>
+      <div class="rentals-grid">
+        <div class="listing-card fade-up d1">
+          <div class="listing-img">
+            <img src="https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Rental">
+            <span class="listing-tag">For Rent</span>
+            <span class="listing-price">$2,100/mo</span>
+          </div>
+          <div class="listing-body">
+            <div class="listing-addr">88 Fernwood Apartment 3B</div>
+            <div class="listing-city">Portland, OR 97201</div>
+            <div class="listing-specs">
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>2 bd</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l2 2-2 2M15 6l-2 2 2 2M5 18h14"/></svg>1 ba</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/></svg>920 sqft</span>
+            </div>
+          </div>
+        </div>
+        <div class="listing-card fade-up d2">
+          <div class="listing-img">
+            <img src="https://images.pexels.com/photos/1029599/pexels-photo-1029599.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Rental">
+            <span class="listing-tag">For Rent</span>
+            <span class="listing-price">$3,400/mo</span>
+          </div>
+          <div class="listing-body">
+            <div class="listing-addr">14 Lakewood Circle</div>
+            <div class="listing-city">Charlotte, NC 28201</div>
+            <div class="listing-specs">
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>3 bd</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l2 2-2 2M15 6l-2 2 2 2M5 18h14"/></svg>2 ba</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/></svg>1,560 sqft</span>
+            </div>
+          </div>
+        </div>
+        <div class="listing-card fade-up d3">
+          <div class="listing-img">
+            <img src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Rental">
+            <span class="listing-tag">For Rent</span>
+            <span class="listing-price">$1,650/mo</span>
+          </div>
+          <div class="listing-body">
+            <div class="listing-addr">202 Riverview Studio</div>
+            <div class="listing-city">Indianapolis, IN 46201</div>
+            <div class="listing-specs">
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>1 bd</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l2 2-2 2M15 6l-2 2 2 2M5 18h14"/></svg>1 ba</span>
+              <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18"/></svg>680 sqft</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:32px;" class="fade-up">
+        <button class="btn btn-outline">View All Rental Listings</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     FIND AN AGENT PAGE
+══════════════════════════════════ -->
+<div id="page-agents" class="page">
+  <div class="page-hero">
+    <div class="wrap">
+      <span class="chip" style="color:var(--amber);">Agent Directory</span>
+      <h1>Find the Right <em>Agent for You</em></h1>
+      <p style="color:rgba(255,255,255,.55);max-width:540px;margin-top:10px;line-height:1.8;">Browse our verified directory of 94,000+ licensed real estate agents across every U.S. market. Filter by specialty, reviews, and transaction history.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="directory-layout">
+        <!-- Sidebar filters -->
+        <div class="dir-sidebar fade-up">
+          <h4>Refine Your Search</h4>
+          <div class="filter-group">
+            <label>Location</label>
+            <input type="text" placeholder="City or ZIP code">
+          </div>
+          <div class="filter-group">
+            <label>Specialty</label>
+            <select>
+              <option>All Specialties</option>
+              <option>Buyer's Agent</option>
+              <option>Listing Agent</option>
+              <option>Luxury Properties</option>
+              <option>Investment</option>
+              <option>New Construction</option>
+              <option>Relocation</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Min. Rating</label>
+            <select>
+              <option>Any Rating</option>
+              <option>4.0+ Stars</option>
+              <option>4.5+ Stars</option>
+              <option>5.0 Stars Only</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Years of Experience</label>
+            <select>
+              <option>Any Experience</option>
+              <option>1–3 Years</option>
+              <option>3–7 Years</option>
+              <option>7–15 Years</option>
+              <option>15+ Years</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Language</label>
+            <select>
+              <option>Any Language</option>
+              <option>English</option>
+              <option>Spanish</option>
+              <option>Mandarin</option>
+              <option>French</option>
+              <option>Portuguese</option>
+            </select>
+          </div>
+          <button class="filter-apply">Apply Filters</button>
+        </div>
+
+        <!-- Results -->
+        <div class="dir-results">
+          <p class="fade-up" style="color:var(--smoke);font-size:.82rem;margin-bottom:4px;">Showing <strong style="color:var(--ink);">3,218 agents</strong> matching your criteria</p>
+          <div class="dir-agent-card fade-up d1">
+            <div class="dir-agent-photo"><img src="https://images.pexels.com/photos/3760809/pexels-photo-3760809.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Agent"></div>
+            <div>
+              <div class="dir-agent-name">Margaret Holloway</div>
+              <div class="dir-agent-company">Holloway Realty Group · Austin, TX</div>
+              <div class="dir-agent-stats">
+                <span>★ 4.9 · 218 reviews</span>
+                <span>12 years experience</span>
+                <span>84 sales in 2024</span>
+                <span>License #TX-4402891</span>
+              </div>
+              <div class="dir-agent-tags">
+                <span class="dir-tag">Buyer's Agent</span>
+                <span class="dir-tag">Listing Specialist</span>
+                <span class="dir-tag">Relocation</span>
+                <span class="dir-tag">New Construction</span>
+              </div>
+            </div>
+            <div class="dir-agent-actions">
+              <button class="dir-btn dir-btn-primary">Contact Agent</button>
+              <button class="dir-btn dir-btn-outline">View Profile</button>
+            </div>
+          </div>
+          <div class="dir-agent-card fade-up d2">
+            <div class="dir-agent-photo"><img src="https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Agent"></div>
+            <div>
+              <div class="dir-agent-name">David Okafor</div>
+              <div class="dir-agent-company">Okafor &amp; Associates Real Estate · Chicago, IL</div>
+              <div class="dir-agent-stats">
+                <span>★ 4.8 · 175 reviews</span>
+                <span>9 years experience</span>
+                <span>67 sales in 2024</span>
+                <span>License #IL-8821044</span>
+              </div>
+              <div class="dir-agent-tags">
+                <span class="dir-tag">Buyer's Agent</span>
+                <span class="dir-tag">First-Time Buyers</span>
+                <span class="dir-tag">Investment</span>
+              </div>
+            </div>
+            <div class="dir-agent-actions">
+              <button class="dir-btn dir-btn-primary">Contact Agent</button>
+              <button class="dir-btn dir-btn-outline">View Profile</button>
+            </div>
+          </div>
+          <div class="dir-agent-card fade-up d3">
+            <div class="dir-agent-photo"><img src="https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Agent"></div>
+            <div>
+              <div class="dir-agent-name">Sofia Reinholt</div>
+              <div class="dir-agent-company">Premier Luxury Estates · Miami, FL</div>
+              <div class="dir-agent-stats">
+                <span>★ 5.0 · 94 reviews</span>
+                <span>16 years experience</span>
+                <span>31 luxury sales in 2024</span>
+                <span>License #FL-3301928</span>
+              </div>
+              <div class="dir-agent-tags">
+                <span class="dir-tag">Luxury</span>
+                <span class="dir-tag">Waterfront</span>
+                <span class="dir-tag">International Buyers</span>
+              </div>
+            </div>
+            <div class="dir-agent-actions">
+              <button class="dir-btn dir-btn-primary">Contact Agent</button>
+              <button class="dir-btn dir-btn-outline">View Profile</button>
+            </div>
+          </div>
+          <div class="dir-agent-card fade-up">
+            <div class="dir-agent-photo"><img src="https://images.pexels.com/photos/1681010/pexels-photo-1681010.jpeg?auto=compress&cs=tinysrgb&w=300" alt="Agent"></div>
+            <div>
+              <div class="dir-agent-name">Marcus Chen</div>
+              <div class="dir-agent-company">Chen Investment Properties · Seattle, WA</div>
+              <div class="dir-agent-stats">
+                <span>★ 4.7 · 302 reviews</span>
+                <span>7 years experience</span>
+                <span>112 sales in 2024</span>
+                <span>License #WA-9920312</span>
+              </div>
+              <div class="dir-agent-tags">
+                <span class="dir-tag">Investment</span>
+                <span class="dir-tag">Multi-Family</span>
+                <span class="dir-tag">Commercial</span>
+              </div>
+            </div>
+            <div class="dir-agent-actions">
+              <button class="dir-btn dir-btn-primary">Contact Agent</button>
+              <button class="dir-btn dir-btn-outline">View Profile</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     MORTGAGE PAGE
+══════════════════════════════════ -->
+<div id="page-mortgage" class="page">
+  <div class="page-hero">
+    <div class="wrap">
+      <span class="chip" style="color:var(--amber);">Home Financing</span>
+      <h1>Explore <em>Mortgage Options</em></h1>
+      <p style="color:rgba(255,255,255,.55);max-width:540px;margin-top:10px;line-height:1.8;">Compare lenders, estimate your monthly payment, and get pre-qualified — all in one place. Understanding your financing puts you in control.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="fade-up">
+        <span class="chip">Payment Estimator</span>
+        <h2 class="section-title">Mortgage <em>Calculator</em></h2>
+      </div>
+      <div class="mortgage-calc fade-up d1" style="margin-top:32px;">
+        <div class="calc-grid">
+          <div>
+            <div class="calc-field">
+              <label>Home Price</label>
+              <input type="number" value="450000" id="calc-price">
+            </div>
+            <div class="calc-field">
+              <label>Down Payment ($)</label>
+              <input type="number" value="90000" id="calc-down">
+            </div>
+            <div class="calc-field">
+              <label>Loan Term</label>
+              <select id="calc-term">
+                <option value="30">30 Years</option>
+                <option value="20">20 Years</option>
+                <option value="15">15 Years</option>
+                <option value="10">10 Years</option>
+              </select>
+            </div>
+            <div class="calc-field">
+              <label>Interest Rate (%)</label>
+              <input type="number" value="6.8" step="0.1" id="calc-rate">
+            </div>
+            <div class="calc-field">
+              <label>Property Tax (annual, $)</label>
+              <input type="number" value="4500" id="calc-tax">
+            </div>
+            <div class="calc-field">
+              <label>Home Insurance (annual, $)</label>
+              <input type="number" value="1200" id="calc-ins">
+            </div>
+            <button class="btn btn-terra" onclick="calcMortgage()" style="width:100%;justify-content:center;">Calculate Payment</button>
+          </div>
+          <div class="calc-result">
+            <div style="color:rgba(255,255,255,.45);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Estimated Monthly Payment</div>
+            <div class="calc-monthly" id="calc-result">$2,640<span>/mo</span></div>
+            <div class="calc-breakdown">
+              <div class="calc-row"><span>Principal &amp; Interest</span><span id="cr-pi">$2,265</span></div>
+              <div class="calc-row"><span>Property Tax</span><span id="cr-tax">$375</span></div>
+              <div class="calc-row"><span>Home Insurance</span><span id="cr-ins">$100</span></div>
+              <div class="calc-row" style="margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1);">
+                <span style="color:#fff;font-weight:500;">Total</span>
+                <span style="color:var(--amber);font-weight:600;" id="cr-total">$2,640</span>
+              </div>
+            </div>
+            <button class="btn" style="background:var(--terra);color:#fff;width:100%;justify-content:center;margin-top:20px;" onclick="showPage('agents')">Get Pre-Qualified →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lenders -->
+      <div style="margin-top:64px;" class="fade-up">
+        <span class="chip">Partner Lenders</span>
+        <h2 class="section-title">Compare <em>Top Lenders</em></h2>
+        <p class="section-sub">Rates shown are indicative. Contact lenders directly for a personalized quote based on your credit profile.</p>
+      </div>
+      <div class="lenders-grid">
+        <div class="lender-card fade-up d1">
+          <div class="lender-rate">6.45%</div>
+          <div class="lender-name">Horizon Home Lending</div>
+          <div class="lender-type">30-Year Fixed · APR 6.68%</div>
+          <p style="font-size:.78rem;color:var(--smoke);margin:10px 0;">Fast pre-approval, low closing costs, and dedicated loan officers available 7 days a week.</p>
+          <button class="btn btn-outline" style="margin-top:8px;width:100%;justify-content:center;">Get Quote</button>
+        </div>
+        <div class="lender-card fade-up d2">
+          <div class="lender-rate">6.62%</div>
+          <div class="lender-name">Summit Mortgage Co.</div>
+          <div class="lender-type">30-Year Fixed · APR 6.79%</div>
+          <p style="font-size:.78rem;color:var(--smoke);margin:10px 0;">Specializing in first-time buyers and VA loans. No origination fees for qualifying applicants.</p>
+          <button class="btn btn-outline" style="margin-top:8px;width:100%;justify-content:center;">Get Quote</button>
+        </div>
+        <div class="lender-card fade-up d3">
+          <div class="lender-rate">6.75%</div>
+          <div class="lender-name">Clearpath Financial</div>
+          <div class="lender-type">30-Year Fixed · APR 6.92%</div>
+          <p style="font-size:.78rem;color:var(--smoke);margin:10px 0;">Digital-first lender with same-day pre-approval and fully online closing process available in 42 states.</p>
+          <button class="btn btn-outline" style="margin-top:8px;width:100%;justify-content:center;">Get Quote</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     NEWS PAGE
+══════════════════════════════════ -->
+<div id="page-news" class="page">
+  <div class="page-hero">
+    <div class="wrap">
+      <span class="chip" style="color:var(--amber);">Insights &amp; Analysis</span>
+      <h1>Real Estate <em>News &amp; Insights</em></h1>
+      <p style="color:rgba(255,255,255,.55);max-width:540px;margin-top:10px;line-height:1.8;">In-depth market analysis, buying guides, investment strategies, and local real estate news to keep you ahead of the curve.</p>
+    </div>
+  </div>
+  <div class="section">
+    <div class="wrap">
+      <div class="news-layout">
+        <div class="news-main-grid">
+          <div class="news-article fade-up">
+            <div class="news-article-img"><img src="https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg?auto=compress&cs=tinysrgb&w=500" alt="Article"></div>
+            <div class="news-article-body">
+              <div class="news-article-cat">Market Report</div>
+              <div class="news-article-title">Home Values Rose 4.2% Nationally in Q2 — Here Are the Top Performing Cities for Price Growth</div>
+              <div class="news-article-excerpt">Despite elevated mortgage rates, strong employment and constrained inventory pushed median home prices higher in most major metros during the second quarter. Sun Belt cities led the gains, while some coastal markets showed modest pullbacks.</div>
+              <div class="news-article-date">April 22, 2026 · 6 min read</div>
+            </div>
+          </div>
+          <div class="news-article fade-up d1">
+            <div class="news-article-img"><img src="https://images.pexels.com/photos/3760067/pexels-photo-3760067.jpeg?auto=compress&cs=tinysrgb&w=500" alt="Article"></div>
+            <div class="news-article-body">
+              <div class="news-article-cat">Buying Guide</div>
+              <div class="news-article-title">First-Time Buyers Face New Challenges in 2025 — But These Programs Can Help</div>
+              <div class="news-article-excerpt">Rising prices and tight inventory have made entering the housing market harder than ever. Here's a comprehensive look at down payment assistance programs, FHA loans, and state-level grants available to first-time buyers.</div>
+              <div class="news-article-date">April 18, 2026 · 8 min read</div>
+            </div>
+          </div>
+          <div class="news-article fade-up d2">
+            <div class="news-article-img"><img src="https://images.pexels.com/photos/7578877/pexels-photo-7578877.jpeg?auto=compress&cs=tinysrgb&w=500" alt="Article"></div>
+            <div class="news-article-body">
+              <div class="news-article-cat">Investment</div>
+              <div class="news-article-title">Rental Yields Climb as Housing Demand Outpaces Available Supply in Key Metro Areas</div>
+              <div class="news-article-excerpt">With homeownership increasingly out of reach for many households, demand for quality rentals has intensified. Investors who bought in secondary cities between 2020 and 2022 are now seeing strong cap rates and low vacancy rates.</div>
+              <div class="news-article-date">April 14, 2026 · 5 min read</div>
+            </div>
+          </div>
+          <div class="news-article fade-up d3">
+            <div class="news-article-img"><img src="https://images.pexels.com/photos/1546168/pexels-photo-1546168.jpeg?auto=compress&cs=tinysrgb&w=500" alt="Article"></div>
+            <div class="news-article-body">
+              <div class="news-article-cat">Mortgage</div>
+              <div class="news-article-title">Rate Watch: What Homebuyers Can Expect Through the Rest of 2026</div>
+              <div class="news-article-excerpt">After months of volatility, mortgage rate forecasts are stabilizing. Economists weigh in on when — and whether — buyers should lock in, float, or wait for rates to ease before making their move.</div>
+              <div class="news-article-date">April 10, 2026 · 7 min read</div>
+            </div>
+          </div>
+          <div class="news-article fade-up">
+            <div class="news-article-img"><img src="https://images.pexels.com/photos/1643389/pexels-photo-1643389.jpeg?auto=compress&cs=tinysrgb&w=500" alt="Article"></div>
+            <div class="news-article-body">
+              <div class="news-article-cat">Home Design</div>
+              <div class="news-article-title">The Renovation Projects That Add the Most Resale Value — Ranked by ROI</div>
+              <div class="news-article-excerpt">Not all upgrades are created equal. A new analysis of 14,000 home sales shows which improvements consistently deliver the highest return at resale, and which ones sellers should skip entirely.</div>
+              <div class="news-article-date">April 6, 2026 · 4 min read</div>
+            </div>
+          </div>
+        </div>
+        <div class="news-sidebar">
+          <div class="sidebar-section fade-up">
+            <h4>Trending Now</h4>
+            <div class="sidebar-item">
+              <img src="https://images.pexels.com/photos/259588/pexels-photo-259588.jpeg?auto=compress&cs=tinysrgb&w=200" alt="">
+              <div>
+                <div class="sidebar-item-title">Why Spring 2026 Is Still a Seller's Market in Most Cities</div>
+                <div class="sidebar-item-date">April 24, 2026</div>
+              </div>
+            </div>
+            <div class="sidebar-item">
+              <img src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=200" alt="">
+              <div>
+                <div class="sidebar-item-title">10 Questions to Ask Before Hiring a Buyer's Agent</div>
+                <div class="sidebar-item-date">April 20, 2026</div>
+              </div>
+            </div>
+            <div class="sidebar-item">
+              <img src="https://images.pexels.com/photos/1732414/pexels-photo-1732414.jpeg?auto=compress&cs=tinysrgb&w=200" alt="">
+              <div>
+                <div class="sidebar-item-title">The Hidden Costs of Buying a Home Most Buyers Miss</div>
+                <div class="sidebar-item-date">April 16, 2026</div>
+              </div>
+            </div>
+          </div>
+          <div class="sidebar-section fade-up d1">
+            <h4>Categories</h4>
+            <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+              <li><a style="font-size:.82rem;color:var(--smoke);display:flex;justify-content:space-between;" href="#">Market Reports <span>24</span></a></li>
+              <li><a style="font-size:.82rem;color:var(--smoke);display:flex;justify-content:space-between;" href="#">Buying Guides <span>31</span></a></li>
+              <li><a style="font-size:.82rem;color:var(--smoke);display:flex;justify-content:space-between;" href="#">Selling Tips <span>18</span></a></li>
+              <li><a style="font-size:.82rem;color:var(--smoke);display:flex;justify-content:space-between;" href="#">Investment <span>22</span></a></li>
+              <li><a style="font-size:.82rem;color:var(--smoke);display:flex;justify-content:space-between;" href="#">Mortgage &amp; Finance <span>16</span></a></li>
+              <li><a style="font-size:.82rem;color:var(--smoke);display:flex;justify-content:space-between;" href="#">Home Design <span>29</span></a></li>
+              <li><a style="font-size:.82rem;color:var(--smoke);display:flex;justify-content:space-between;" href="#">Neighborhood Guides <span>40</span></a></li>
+            </ul>
+          </div>
+          <div class="sidebar-section fade-up d2" style="background:var(--bark);">
+            <h4 style="color:#fff;">Get Market Alerts</h4>
+            <p style="font-size:.78rem;color:rgba(255,255,255,.45);margin-bottom:14px;">Receive weekly reports on price trends, new listings, and market shifts in your target area.</p>
+            <input type="email" placeholder="Your email address" style="width:100%;padding:10px 12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:5px;color:#fff;font-size:.82rem;margin-bottom:10px;outline:none;">
+            <button style="width:100%;padding:10px;background:var(--terra);color:#fff;border:none;border-radius:5px;font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;">Subscribe Free</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     FOOTER (shared)
+══════════════════════════════════ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">Nest<span>Finder</span></div>
+        <p class="footer-about">America's most trusted realtor directory. Connecting buyers, sellers, and renters with verified, top-performing agents across every U.S. market since 2012.</p>
+        <div class="social-row">
+          <a class="soc" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a class="soc" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a class="soc" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 22.43.36a9 9 0 0 1-2.88 1.1A4.52 4.52 0 0 0 16.11 0c-2.5 0-4.52 2.02-4.52 4.52 0 .35.04.7.11 1.03A12.84 12.84 0 0 1 2.08.9a4.52 4.52 0 0 0 1.4 6.03 4.48 4.48 0 0 1-2.05-.56v.06c0 2.19 1.56 4.02 3.63 4.43a4.52 4.52 0 0 1-2.04.08 4.52 4.52 0 0 0 4.22 3.14A9.07 9.07 0 0 1 2 19.54a12.8 12.8 0 0 0 6.92 2.03c8.3 0 12.84-6.88 12.84-12.84 0-.2 0-.39-.01-.58A9.17 9.17 0 0 0 24 4.59a9 9 0 0 1-2.59.71 4.52 4.52 0 0 0 1.98-2.49l-.01.01z"/></svg></a>
+          <a class="soc" href="#"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div>
+        <div class="footer-apps">
+          <div class="app-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            App Store
+          </div>
+          <div class="app-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Google Play
+          </div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Explore</h5>
+        <ul>
+          <li><a onclick="showPage('buy')">Buy a Home</a></li>
+          <li><a onclick="showPage('sell')">Sell Your Home</a></li>
+          <li><a onclick="showPage('rent')">Rent a Property</a></li>
+          <li><a onclick="showPage('agents')">Find an Agent</a></li>
+          <li><a onclick="showPage('mortgage')">Mortgage Tools</a></li>
+          <li><a onclick="showPage('news')">News &amp; Insights</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>For Agents</h5>
+        <ul>
+          <li><a href="#">Create a Profile</a></li>
+          <li><a href="#">Agent Advertising</a></li>
+          <li><a href="#">Market Your Listings</a></li>
+          <li><a href="#">Lead Generation</a></li>
+          <li><a href="#">Agent Resources</a></li>
+          <li><a href="#">Agent Login</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#">About NestFinder</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press &amp; Media</a></li>
+          <li><a href="#">Accessibility</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">Advertise With Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 NestFinder, Inc. All rights reserved. NestFinder does not endorse any individual agent or listing. Always verify credentials independently.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Do Not Sell My Data</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ══ PAGE NAVIGATION ══ */
+function showPage(id) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  // Show target
+  const target = document.getElementById('page-' + id);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  // Update nav tabs
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.page === id);
+  });
+  // Trigger reveals for new page
+  setTimeout(triggerReveals, 50);
+}
+
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => showPage(tab.dataset.page));
+});
+
+/* ══ SCROLL REVEAL ══ */
+function triggerReveals() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.page.active .fade-up:not(.in)').forEach(el => obs.observe(el));
+}
+triggerReveals();
+
+/* ══ HERO TABS ══ */
+document.querySelectorAll('.htab').forEach(tab => {
+  tab.addEventListener('click', function () {
+    document.querySelectorAll('.htab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+/* ══ MORTGAGE CALCULATOR ══ */
+function calcMortgage() {
+  const price = parseFloat(document.getElementById('calc-price').value) || 450000;
+  const down  = parseFloat(document.getElementById('calc-down').value)  || 90000;
+  const term  = parseFloat(document.getElementById('calc-term').value)  || 30;
+  const rate  = parseFloat(document.getElementById('calc-rate').value)  || 6.8;
+  const tax   = parseFloat(document.getElementById('calc-tax').value)   || 4500;
+  const ins   = parseFloat(document.getElementById('calc-ins').value)   || 1200;
+
+  const principal = price - down;
+  const r = rate / 100 / 12;
+  const n = term * 12;
+  const pi = r === 0 ? principal / n : principal * r * Math.pow(1+r,n) / (Math.pow(1+r,n) - 1);
+  const taxMo = tax / 12;
+  const insMo = ins / 12;
+  const total = pi + taxMo + insMo;
+
+  const fmt = v => '$' + Math.round(v).toLocaleString();
+  document.getElementById('cr-pi').textContent   = fmt(pi);
+  document.getElementById('cr-tax').textContent  = fmt(taxMo);
+  document.getElementById('cr-ins').textContent  = fmt(insMo);
+  document.getElementById('cr-total').textContent = fmt(total);
+  document.getElementById('calc-result').innerHTML = fmt(total) + '<span>/mo</span>';
+}
+</script>
+</body>
+</html>
